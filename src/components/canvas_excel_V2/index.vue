@@ -58,7 +58,8 @@ export default {
       default(){
         return {
           xScroll:true,
-          yScroll:true
+          yScroll:true,
+          caneditform:false
         }
       }
     }
@@ -197,17 +198,22 @@ export default {
       let totalRow = this.canvasProps.totalrow
       if (!totalRow && this.tableData) {
         totalRow = this.tableData.length
+        props.totalrow = totalRow
       }
 
       this.totalWidth = Config.getWidth({ totalcol, cols: props.cols, group: this.canvasProps.group })
       this.totalHeight = Config.getHeight({ totalrow: totalRow })
       this.width = Math.min(maxWidth, this.totalWidth)
-      this.height = Math.max(maxHeight, this.totalHeight || 0)
+      this.height = maxHeight
 
       if (!totalRow) { 
         this.totalHeight = this.height
       }
-      console.log(169,totalRow, '宽度', this.totalWidth, '高度', this.totalHeight)
+      console.log(169,'totalRow',
+      totalRow, '宽度',
+       this.totalWidth, 
+       '高度', this.totalHeight,
+       '最大高度',this.height)
       this.canvasExcelInstance = new CanvasExcel(canvas, {
         width: this.width,
         height: this.height,

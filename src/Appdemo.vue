@@ -5,16 +5,13 @@
 
 <script>
 import CanvasExcel from './components/canvas_excel'
-// import budgetRentDataList from './budgetRentDataList.js'
+import budgetRentDataList from './budgetRentDataList.js'
 export default {
   name: 'app',
   data(){
     return {
-      budgetRentDataList:[
-        {core_name:"xxxxx",business_divisions_name:'ttttt',title:'sassas',product_name:'ppp'},
-        {core_name:"xxxxx",business_divisions_name:'ttttt',title:'sassas',product_name:'ppp'}
-      ],
-      report_table: {
+      budgetRentDataList:Object.freeze(budgetRentDataList),
+      report_table: Object.freeze({
         type: 'selection',
         selection: {
           align: 'left',
@@ -112,10 +109,101 @@ export default {
             sortable: false,
             width: 120
           },
-          
+          {
+            name: 'department_name',
+            title: '所属项目部',
+            sortable: false,
+            fixed: 'left'
+          }, {
+            name: 'product_name',
+            title: '产品',
+            sortable: false,
+            fixed: 'left',
+            width: 150
+          }, {
+            name: 'title',
+            title: '相关业务项目',
+            sortable: false,
+            fixed: 'left'
+          }, {
+            name: 'desc',
+            title: '备注说明',
+            sortable: false,
+            fixed: 'left'
+          },{
+            name: 'core_name',
+            title: '所属中心',
+            fixed: 'left',
+            sortable: false,
+            width: 120
+          },
+          {
+            name: 'business_divisions_name',
+            title: '所属事业部',
+            fixed: 'left',
+            sortable: false,
+            width: 120
+          },
+          {
+            name: 'department_name',
+            title: '所属项目部',
+            sortable: false,
+            fixed: 'left'
+          }, {
+            name: 'product_name',
+            title: '产品',
+            sortable: false,
+            fixed: 'left',
+            width: 150
+          }, {
+            name: 'title',
+            title: '相关业务项目',
+            sortable: false,
+            fixed: 'left'
+          }, {
+            name: 'desc',
+            title: '备注说明',
+            sortable: false,
+            fixed: 'left'
+          },{
+            name: 'core_name',
+            title: '所属中心',
+            fixed: 'left',
+            sortable: false,
+            width: 120
+          },
+          {
+            name: 'business_divisions_name',
+            title: '所属事业部',
+            fixed: 'left',
+            sortable: false,
+            width: 120
+          },
+          {
+            name: 'department_name',
+            title: '所属项目部',
+            sortable: false,
+            fixed: 'left'
+          }, {
+            name: 'product_name',
+            title: '产品',
+            sortable: false,
+            fixed: 'left',
+            width: 150
+          }, {
+            name: 'title',
+            title: '相关业务项目',
+            sortable: false,
+            fixed: 'left'
+          }, {
+            name: 'desc',
+            title: '备注说明',
+            sortable: false,
+            fixed: 'left'
+          }
         ],
         showPagination: false
-      }
+      })
     }
   },
   components: {

@@ -71,20 +71,23 @@ DataGrid.prototype.paintHeader = function () {
     dc.stroke()
     dc.closePath()
   }
-  for (i = this._scrollRowNum, y = this._offsetY; y <= this.getTotalHeight() && i < this._rows.length; i++) { // 竖列
-    row = (this._rows[i])
-    if (row.getVisible()) {
-      y += row.getHeight()
+  
+  for (i = this._scrollRowNum, y = this._offsetY; y <= this.getHeight() && i < this._rows.length; i++) { // 竖列
+    row = this._rows[i]
+    
+    if (DataRow.getVisible(row)) {
+      y += DataRow.getHeight(row)
       text = i + 1
       textlength = dc.measureText(text).width
       textx = groupFlagWidth + (_offsetX - textlength) / 2
-      texty = y - (row.getHeight() - this._textHeight) / 2
+      texty = y - (DataRow.getHeight(row) - this._textHeight) / 2
+      
       if (i < this._sel_startRow || i > this._sel_endRow) {
         dc.fillStyle = '#fafafa' // "#0f0";//左侧单元格
-        dc.fillRect(1+ groupFlagWidth, y + 1 - row.getHeight(), _offsetX - 2, row.getHeight() - 2)
+        dc.fillRect(1+ groupFlagWidth, y + 1 - DataRow.getHeight(row), _offsetX - 2, DataRow.getHeight(row) - 2)
       } else {
         dc.fillStyle = selColor
-        dc.fillRect(1+ groupFlagWidth, y + 1 - row.getHeight(), _offsetX - 2, row.getHeight() - 2)
+        dc.fillRect(1+ groupFlagWidth, y + 1 - DataRow.getHeight(row), _offsetX - 2, DataRow.getHeight(row) - 2)
       }
 
       dc.fillStyle = '#716F64'
@@ -106,7 +109,7 @@ DataGrid.prototype.paintHeader = function () {
         }
         let grouptextlength = dc.measureText(grouptext).width
         let grouptextx = (groupFlagWidth - grouptextlength) / 2
-        let grouptexty = y - (row.getHeight() - this._textHeight) / 2
+        let grouptexty = y - (DataRow.getHeight(row) - this._textHeight) / 2
         dc.fillText(grouptext, grouptextx, grouptexty)
       }
 
@@ -120,8 +123,8 @@ DataGrid.prototype.paintHeader = function () {
   dc.clearRect(this._offsetX, 0 ,this.getTotalWidth(),this._offsetY - 1)
   for (i = this._scrollColNum, x = this._offsetX; x <= this.getTotalWidth() && i < this._cols.length; i++) { // 横轴
     col = this._cols[i]
-    if (col.getVisible()) {
-      x += col.getWidth()
+    if (DataCol.getVisible(col)) {
+      x += DataCol.getWidth(col)
       text = ''
       temp = i
       while (Math.floor(temp / 26) != 0) {
@@ -134,19 +137,19 @@ DataGrid.prototype.paintHeader = function () {
         text = this._charDic[temp]
       }
       textlength = dc.measureText(text).width
-      if (textlength > col.getWidth()) {
-        textx = x - col.getWidth()
+      if (textlength > DataCol.getWidth(col)) {
+        textx = x - DataCol.getWidth(col)
       } else {
-        textx = x - (col.getWidth() + textlength) / 2
+        textx = x - (DataCol.getWidth(col) + textlength) / 2
       }
       texty = (this._offsetY + this._textHeight) / 2
       if (i < this._sel_startCol || i > this._sel_endCol) // 列
       {
         dc.fillStyle = HeaderLeftBg // "#0f0";
-        dc.fillRect((x - col.getWidth() + 1), 1, col.getWidth() - 2, this._offsetY - 2)
+        dc.fillRect((x - DataCol.getWidth(col) + 1), 1, DataCol.getWidth(col) - 2, this._offsetY - 2)
       } else {
         dc.fillStyle = selColor
-        dc.fillRect((x - col.getWidth() + 1), 1, col.getWidth() - 2, this._offsetY - 2)
+        dc.fillRect((x - DataCol.getWidth(col) + 1), 1, DataCol.getWidth(col) - 2, this._offsetY - 2)
       }
       dc.fillStyle = '#716F64' // "#716F64";
       dc.fillRect(x, 1, 0.5, this._offsetY - 2)
@@ -200,10 +203,10 @@ DataGrid.prototype.paintNetLine = function () {
     dc.lineWidth = 1
     dc.beginPath()
     dc.moveTo(groupFlagWidth, y)
-    dc.lineTo(this.getTotalWidth(), y)
+    dc.lineTo(this.getWidth(), y)
     y += this._offsetY
     dc.moveTo(groupFlagWidth, y)
-    dc.lineTo(this.getTotalWidth(), y)
+    dc.lineTo(this.getWidth(), y)
     dc.stroke()
     dc.closePath()
 
@@ -216,10 +219,10 @@ DataGrid.prototype.paintNetLine = function () {
     dc.strokeStyle = borderColor // '#BBBBBB' 竖线
     dc.beginPath()
     dc.moveTo(x, 0)
-    dc.lineTo(x, this.getTotalHeight())
+    dc.lineTo(x, this.getHeight())
     x += _offsetX
     dc.moveTo(x, 0)
-    dc.lineTo(x, this.getTotalHeight())
+    dc.lineTo(x, this.getHeight())
     dc.stroke()
     dc.closePath()
 
@@ -229,14 +232,14 @@ DataGrid.prototype.paintNetLine = function () {
       // dc.save()
       dc.translate(-this.scrollX, -this.scrollY)
       const rectSize = this.getRectSize(this._scrollRowNum, this._scrollColNum, this._rows.length, this._cols.length)
-      const width = Number(this._showheader) === 0 ? rectSize.width : this.getTotalWidth()
-      const height = Number(this._showheader) === 0 ? rectSize.height : this.getTotalHeight()
+      const width = Number(this._showheader) === 0 ? rectSize.width : this.getWidth()
+      const height = Number(this._showheader) === 0 ? rectSize.height : this.getHeight()
 
-      for (i = this._scrollRowNum; y <= this.getTotalHeight() && i < this._rows.length; i++) { // 横线
-        row = (this._rows[i])
-        if (row.getVisible()) {
+      for (i = this._scrollRowNum; y <= this.getHeight() && i < this._rows.length; i++) { // 横线
+        row = this._rows[i]
+        if (DataRow.getVisible(row)) {
           dc.beginPath()
-          y += row.getHeight()
+          y += DataRow.getHeight(row)
           dc.moveTo(offsetx, y)
           dc.lineTo(width, y)
           dc.stroke()
@@ -244,11 +247,11 @@ DataGrid.prototype.paintNetLine = function () {
         }
       }
 
-      for (i = this._scrollColNum; x <= this.getTotalWidth() && i < this._cols.length; i++) { // 竖线
+      for (i = this._scrollColNum; x <= this.getWidth() && i < this._cols.length; i++) { // 竖线
         col = this._cols[i]
-        if (col.getVisible()) {
+        if (DataCol.getVisible(col)) {
           dc.beginPath()
-          x += col.getWidth()
+          x += DataCol.getWidth(col)
           dc.moveTo(x, offsety)
           dc.lineTo(x, height)
           dc.stroke()
@@ -310,20 +313,20 @@ DataGrid.prototype.paintCells = function() {
 
   for (i = this._scrollRowNum, y = this._offsetY; y < this.getHeight() && i < this._rows.length; i++) {
     row = this._rows[i]
-    if (row.getVisible()) {
+    if (DataRow.getVisible(row)) {
       for (x = this._offsetX, j = this._scrollColNum; j < this._cols.length && x < this.getWidth(); j++) {
         col = this._cols[j]
-        if (col.getVisible()) {
+        if (DataCol.getVisible(col)) {
           cell = this._cells[i][j]
           cellsize = this.getCellSize(i, j)
 
-          if (cell.ifPaint()) {
+          if (DataCell.ifPaint(cell)) {
             width = 0
             height = 0
-            if (cell.getColspan() > 0 && cell.getRowspan() > 0) { // 该单元格为合并 或者正常
+            if (DataCell.getColspan(cell) > 0 && DataCell.getRowspan(cell) > 0) { // 该单元格为合并 或者正常
 
               if (cellsize.width > 0 && cellsize.height > 0) {
-                if (cell.getCombineStyle() == 'combine') { // 该单元格为合并
+                if (DataCell.getCombineStyle(cell) == 'combine') { // 该单元格为合并
                   dc.fillStyle = "#fff";
                   dc.fillRect(x + 1, y + 1, cellsize.width - 2, cellsize.height - 2)
                   let nextcell = this._cells[i][j + 1]
@@ -344,8 +347,8 @@ DataGrid.prototype.paintCells = function() {
                   //											}
                   // }else{
 
-                  if (row.getColor() !== false) {
-                    dc.fillStyle = row.getColor()
+                  if (DataRow.getColor(row) !== false) {
+                    dc.fillStyle = DataRow.getColor(row)
                     dc.fillRect(x, y, cellsize.width, cellsize.height)
                   }
                   this.paintCellContent(dc, cell, x, y, cellsize.width, cellsize.height)
@@ -353,7 +356,7 @@ DataGrid.prototype.paintCells = function() {
                   // }
                 } else { // 改单元格非合并单元格
                   //
-                  //  if (cell.ifPaint()) { //单元格无内容不描绘,前一个有内容不描绘
+                  //  if (DataCell.ifPaint(cell)) { //单元格无内容不描绘,前一个有内容不描绘
                   // dc.fillStyle = "#fff";
                   // dc.fillRect(x + 1, y + 1, cellsize.width - 2, cellsize.height - 2);
                   // var nextcell=this._cells[i][j+1];
@@ -377,8 +380,8 @@ DataGrid.prototype.paintCells = function() {
                   //												this.paintCellContent(dc, cell, x, y, cellsize.width, cellsize.height);
                   //											}
                   // }else{
-                  if (row.getColor() !== false) {
-                    dc.fillStyle = row.getColor()
+                  if (DataRow.getColor(row) !== false) {
+                    dc.fillStyle = DataRow.getColor(row)
                     dc.fillRect(x, y, cellsize.width, cellsize.height)
                   }
 
@@ -389,9 +392,9 @@ DataGrid.prototype.paintCells = function() {
                   // }
                 }
               }
-            } else { // cell.getColspan() < 0 合并单元格的其他单元格
-              temprow = 0 - cell.getRowspan()
-              tempcol = 0 - cell.getColspan()
+            } else { // DataCell.getColspan(cell) < 0 合并单元格的其他单元格
+              temprow = 0 - DataCell.getRowspan(cell)
+              tempcol = 0 - DataCell.getColspan(cell)
               if (temprow < this._scrollRowNum || tempcol < this._scrollColNum) {
                 if ((i == this._scrollRowNum && j == this._scrollColNum) || (i == this._scrollRowNum && j == tempcol) || (j == this._scrollColNum && i == temprow)) {
                   cell = this._cells[temprow][tempcol]
@@ -418,10 +421,10 @@ DataGrid.prototype.paintCells = function() {
             // dc.fillRect(x+1,y+1,cellsize.width-2,cellsize.height-2);
 
           }
-          x += col.getWidth()
+          x += DataCol.getWidth(col)
         }
       }
-      y += row.getHeight()
+      y += DataRow.getHeight(row)
     }
   }
   // rightimagedata = null;
@@ -431,8 +434,9 @@ DataGrid.prototype.paintCells = function() {
 }
 
 DataGrid.prototype.paintCellContent = function(dc, cell, x, y, width, height) {
-    var backFillStyle = cell.getBackColor(this._brlist);;
-	if (backFillStyle !== undefined) {
+  dc.fillStyle = '#fff';
+  var backFillStyle = DataCell.getBackFillColor(cell,this._brlist);
+	if (backFillStyle) {
         	dc.fillStyle = backFillStyle;//cell._backColor;
         	// dc.fillRect(x + 1, y + 1, width - 2, height - 2);
     		dc.fillRect(x, y, width, height);
@@ -444,7 +448,7 @@ DataGrid.prototype.paintCellContent = function(dc, cell, x, y, width, height) {
   if ((cell._tag >> 5) & 0x01) { // 3Dbox
     this.paintCell3Dshape(dc, cell, x, y, width, height)
   }
-  if (cell._cellImage !== 'none' && cell._cellImage.filename !== undefined) {
+  if (cell._cellImage && cell._cellImage.filename) {
     const _this = this
 
     let img = {}
@@ -513,15 +517,15 @@ DataGrid.prototype.paintCellContent = function(dc, cell, x, y, width, height) {
     this.paintCellControlsItem(dc, cell, 'financialhead', x, y, width, height)
   }
 
-  if (cell.getBorderLine() != 'none') {
-    const borderLines = cell.getBorderLine()
+  if (DataCell.getBorderLine(cell) != 'none') {
+    const borderLines = DataCell.getBorderLine(cell)
     // this.paintBorderLine(dc,borderLines,x,y,width,height,cell);
   }
 
   if (cell._slty != undefined) {
     this.paintCellSlantline(dc, cell, x, y, width, height)
   }
-  if ((this._designmode === undefined && cell._note !== 'none') || cell._tip !== 'none') {
+  if ((this._designmode === undefined && cell._note) || cell._tip) {
     this.paintNoteTag(dc, cell, x, y, width, height)
   }
 }
@@ -699,29 +703,31 @@ DataGrid.prototype.paint = function(type) {
   // this.paintRowColor();//背景奇偶颜色调色器
   // dc.translate(this.scrollX, this.scrollY)
 
-
+  // console.log('初始化 getHEight',this.getHeight(), 
+  // this.getTotalHeight(),'宽度',this.getWidth(),this.getTotalWidth()
   dc = this.getDc()
-  this.paintNetLine()
+
+  // this.paintNetLine()
   // var imageLeft = dc.getImageData(0, 0, compos.x + this._offsetX, this.glGetHeight());
   // var imageTop = dc.getImageData(0, 0, this.glGetWidth(), compos.y + this._offsetY);
   this.releaseDc(dc)
 
-  this.paintCells()
-  if (this.getMousecursor().indexOf('paintborder') == -1 && this._cols.length !== 0) {
-    // if (type === 'isMouseDown') {
-    this.checkIsInCombineCellsAroundSelCells() // 第一次渲染 检测第一个单元格是不是合并单元格
-    this.paintSelCells()
-    // }
-  }
+  // this.paintCells()
+  // if (this.getMousecursor().indexOf('paintborder') == -1 && this._cols.length !== 0) {
+  //   // if (type === 'isMouseDown') {
+  //   this.checkIsInCombineCellsAroundSelCells() // 第一次渲染 检测第一个单元格是不是合并单元格
+  //   this.paintSelCells()
+  //   // }
+  // }
   // this.paintNetLine()
   /* 绘制选中框*/
-console.log(this._rows,this.getTotalWidth(),this.getTotalHeight())
+
   dc = this.getDc()
   // dc.putImageData(imageLeft, 0, 0);
   // dc.putImageData(imageTop, 0, 0);
   this.releaseDc(dc)
   dc.restore()
-  if (this.isShowHeader()) this.paintHeader() // 画表头的字母
+  // if (this.isShowHeader()) this.paintHeader() // 画表头的字母
 
   dc = this.getDc()
   // dc.putImageData(imageRight, compos.x + this.getWidth(), 0);
