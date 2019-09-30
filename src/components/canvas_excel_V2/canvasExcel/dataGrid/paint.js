@@ -712,13 +712,13 @@ DataGrid.prototype.paint = function(type) {
   // var imageTop = dc.getImageData(0, 0, this.glGetWidth(), compos.y + this._offsetY);
   this.releaseDc(dc)
 
-  // this.paintCells()
-  // if (this.getMousecursor().indexOf('paintborder') == -1 && this._cols.length !== 0) {
-  //   // if (type === 'isMouseDown') {
-  //   this.checkIsInCombineCellsAroundSelCells() // 第一次渲染 检测第一个单元格是不是合并单元格
-  //   this.paintSelCells()
-  //   // }
-  // }
+  this.paintCells()
+  if (this.getMousecursor().indexOf('paintborder') == -1 && this._cols.length !== 0) {
+    // if (type === 'isMouseDown') {
+    this.checkIsInCombineCellsAroundSelCells() // 第一次渲染 检测第一个单元格是不是合并单元格
+    this.paintSelCells()
+    // }
+  }
   // this.paintNetLine()
   /* 绘制选中框*/
 

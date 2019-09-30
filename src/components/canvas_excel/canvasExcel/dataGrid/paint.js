@@ -715,7 +715,7 @@ DataGrid.prototype.paint = function(type) {
   }
   // this.paintNetLine()
   /* 绘制选中框*/
-console.log(this._rows,this.getTotalWidth(),this.getTotalHeight())
+// console.log(this._rows,this.getTotalWidth(),this.getTotalHeight())
   dc = this.getDc()
   // dc.putImageData(imageLeft, 0, 0);
   // dc.putImageData(imageTop, 0, 0);

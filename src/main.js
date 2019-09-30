@@ -2,8 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import App2 from './App2.js'
 import VueRouter from 'vue-router'
-
-import Demo from './components/demo.vue'
+import Main from './main.vue'
+import Demo from './Appdemo.vue'
 
 Vue.use(VueRouter)
 Vue.config.productionTip = false
@@ -18,7 +18,8 @@ const Bar = { template: '<div>bar</div>' }
 // `Vue.extend()`, or just a component options object.
 // We'll talk about nested routes later.
 const routes = [
-  { path: '/bar', component: App }
+  { path: '/bar', component: App },
+  { path: '/barV2', component: Demo }
 ]
 
 // 3. Create the router instance and pass the `routes` option
@@ -29,5 +30,5 @@ const router = new VueRouter({
 })
 new Vue({
   router,
-  render: h => h(App)
+  render: h => h(Main)
 }).$mount('#app')

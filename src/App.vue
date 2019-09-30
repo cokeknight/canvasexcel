@@ -1,6 +1,6 @@
 <template>
  <CanvasExcel :table-schema="report_table" 
- :table-data="budgetRentDataList" style="width:100%;height:100%;"/>
+ :table-data="budgetRentDataList" style="width:100%;height:100%;" :canvasProps="canvasProps"/>
 </template>
 
 <script>
@@ -10,6 +10,11 @@ export default {
   name: 'app',
   data(){
     return {
+      canvasProps:{
+         xScroll:true,
+          yScroll:true,
+          totalrow:4
+      },
       budgetRentDataList:[
         {core_name:"xxxxx",business_divisions_name:'ttttt',title:'sassas',product_name:'ppp'},
         {core_name:"xxxxx",business_divisions_name:'ttttt',title:'sassas',product_name:'ppp'}

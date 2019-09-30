@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import CanvasExcel from './components/canvas_excel'
+import CanvasExcel from './components/canvas_excel_V2'
 import budgetRentDataList from './budgetRentDataList.js'
 export default {
   name: 'app',
