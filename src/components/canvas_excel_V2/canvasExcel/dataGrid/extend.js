@@ -44,10 +44,7 @@ DataGrid.prototype.getColHeaderWidth = function() {
   return this._ColHeaderWidth
 }
 DataGrid.prototype.getNetChartVisible = function() {
-  if (typeof (this._showgrid) === 'string') {
-    return parseInt(this._showgrid, 10)
-  }
-  if (this._showgrid !== undefined) {
+  if (this._showgrid) {
     return this._showgrid
   }
   return 1
@@ -1318,9 +1315,9 @@ DataGrid.prototype.setScrollX = function(scrollX) {
   const dc = this.getDc()
   // dc.translate(0,20)
 
-  window.requestAnimationFrame(() => {
+  // window.requestAnimationFrame(() => {
     this.reDrawChart()
-  })
+  // })
 }
 DataGrid.prototype.setScrollY = function(scrollY) {
   this.scrollY = scrollY

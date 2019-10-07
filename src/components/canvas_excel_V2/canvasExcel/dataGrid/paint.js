@@ -61,13 +61,13 @@ DataGrid.prototype.paintHeader = function () {
     groupFlagWidth = Config.groupFlagWidth
     _offsetX = _offsetX - Config.groupFlagWidth
   }
-  dc.clearRect(1, this._offsetY, _offsetX + groupFlagWidth - 1,this.getTotalHeight())
+  dc.clearRect(1, this._offsetY, _offsetX + groupFlagWidth - 1,this.getHeight())
   if (this.group) {
     dc.lineWidth = 1
     dc.strokeStyle = borderColor
     dc.beginPath()
     dc.moveTo(groupFlagWidth, 0)
-    dc.lineTo(groupFlagWidth, this.getTotalHeight())
+    dc.lineTo(groupFlagWidth, this.getHeight())
     dc.stroke()
     dc.closePath()
   }
@@ -160,12 +160,12 @@ DataGrid.prototype.paintHeader = function () {
   }
   dc.restore()
   dc.fillStyle = '#fff'
-  if (y < this.getTotalHeight()) {
-    dc.fillRect(0, y, this.getTotalWidth(), this.getTotalHeight() - y)
-  }
-  if (x < this.getTotalWidth()) {
-    dc.fillRect(x, 0, this.getTotalWidth() - x, this.getTotalHeight())
-  }
+  // if (y < this.getTotalHeight()) {
+  //   dc.fillRect(0, y, this.getTotalWidth(), this.getTotalHeight() - y)
+  // }
+  // if (x < this.getTotalWidth()) {
+  //   dc.fillRect(x, 0, this.getTotalWidth() - x, this.getTotalHeight())
+  // }
   /* 左上角*/
   dc.translate(0, 0)
   dc.lineWidth = 0.2
@@ -192,7 +192,8 @@ DataGrid.prototype.paintNetLine = function () {
     const offsety = this._offsetY
     const
       offsetx = this._offsetX
-
+    let visibleWidth = this.getWidth()
+    let visibleHeight = this.getHeight()
     dc.lineWidth = 1
     dc.strokeStyle = borderColor // '#BBBBBB'
     let groupFlagWidth = 0
@@ -203,10 +204,10 @@ DataGrid.prototype.paintNetLine = function () {
     dc.lineWidth = 1
     dc.beginPath()
     dc.moveTo(groupFlagWidth, y)
-    dc.lineTo(this.getWidth(), y)
+    dc.lineTo(visibleWidth, y)
     y += this._offsetY
     dc.moveTo(groupFlagWidth, y)
-    dc.lineTo(this.getWidth(), y)
+    dc.lineTo(visibleWidth, y)
     dc.stroke()
     dc.closePath()
 
@@ -216,13 +217,13 @@ DataGrid.prototype.paintNetLine = function () {
       x = x + groupFlagWidth
       _offsetX = _offsetX - groupFlagWidth
     }
-    dc.strokeStyle = borderColor // '#BBBBBB' 竖线
+    // dc.strokeStyle = borderColor // '#BBBBBB' 竖线
     dc.beginPath()
     dc.moveTo(x, 0)
-    dc.lineTo(x, this.getHeight())
+    dc.lineTo(x, visibleHeight)
     x += _offsetX
     dc.moveTo(x, 0)
-    dc.lineTo(x, this.getHeight())
+    dc.lineTo(x, visibleHeight)
     dc.stroke()
     dc.closePath()
 
@@ -231,11 +232,17 @@ DataGrid.prototype.paintNetLine = function () {
     {
       // dc.save()
       dc.translate(-this.scrollX, -this.scrollY)
-      const rectSize = this.getRectSize(this._scrollRowNum, this._scrollColNum, this._rows.length, this._cols.length)
-      const width = Number(this._showheader) === 0 ? rectSize.width : this.getWidth()
-      const height = Number(this._showheader) === 0 ? rectSize.height : this.getHeight()
-
-      for (i = this._scrollRowNum; y <= this.getHeight() && i < this._rows.length; i++) { // 横线
+      let width
+      let height
+      if (this._showheader) {
+        const rectSize = this.getRectSize(this._scrollRowNum, this._scrollColNum, this._rows.length, this._cols.length)
+        width = rectSize.width
+        height = rectSize.height
+      } else {
+        width =  visibleWidth
+        height = visibleHeight
+      }
+      for (i = this._scrollRowNum; y <= visibleHeight && i < this._rows.length; i++) { // 横线
         row = this._rows[i]
         if (DataRow.getVisible(row)) {
           dc.beginPath()
@@ -247,7 +254,7 @@ DataGrid.prototype.paintNetLine = function () {
         }
       }
 
-      for (i = this._scrollColNum; x <= this.getWidth() && i < this._cols.length; i++) { // 竖线
+      for (i = this._scrollColNum; x <= visibleWidth && i < this._cols.length; i++) { // 竖线
         col = this._cols[i]
         if (DataCol.getVisible(col)) {
           dc.beginPath()
@@ -258,7 +265,7 @@ DataGrid.prototype.paintNetLine = function () {
           dc.closePath()
         }
       }
-      this.releaseDc(dc)
+      // this.releaseDc(dc)
     }
   }
 
@@ -310,11 +317,12 @@ DataGrid.prototype.paintCells = function() {
   dc.translate(-this.scrollX,-this.scrollY)
   // 设置画布的字体属性 就不用在画布里设置
   this.setCanvasStyle(dc)
-
-  for (i = this._scrollRowNum, y = this._offsetY; y < this.getHeight() && i < this._rows.length; i++) {
+  const visibleHeight = this.getVisibleHeight()
+  const visibleWidth= this.getVisibleWidth()
+  for (i = this._scrollRowNum, y = this._offsetY; y < visibleHeight && i < this._rows.length; i++) {
     row = this._rows[i]
     if (DataRow.getVisible(row)) {
-      for (x = this._offsetX, j = this._scrollColNum; j < this._cols.length && x < this.getWidth(); j++) {
+      for (x = this._offsetX, j = this._scrollColNum; j < this._cols.length && x < visibleWidth; j++) {
         col = this._cols[j]
         if (DataCol.getVisible(col)) {
           cell = this._cells[i][j]
@@ -385,7 +393,7 @@ DataGrid.prototype.paintCells = function() {
                     dc.fillRect(x, y, cellsize.width, cellsize.height)
                   }
 
-                  this.paintCellContent(dc, cell, x, y, cellsize.width, cellsize.height)
+                  // this.paintCellContent(dc, cell, x, y, cellsize.width, cellsize.height)
                   //
                   // }
 
@@ -402,7 +410,7 @@ DataGrid.prototype.paintCells = function() {
                   cellsize = this.getCellSize(temprow, tempcol)
                   dc.fillStyle = '#fff'
                   dc.fillRect(cellpos.x + 1, cellpos.y + 1, cellsize.width - 2, cellsize.height - 2)
-                  this.paintCellContent(dc, cell, cellpos.x, cellpos.y, cellsize.width, cellsize.height)
+                  // this.paintCellContent(dc, cell, cellpos.x, cellpos.y, cellsize.width, cellsize.height)
                 }
               }
             }
@@ -681,8 +689,8 @@ DataGrid.prototype.paintCellBorder = function(dc, cell, x, y, width, height) {
 // }
 DataGrid.prototype.paint = function(type) {
   // console.log('paint', type)
+  let dc = this.getDc()
   if (type === 'mousedown' || type === 'mousemove'){
-    let dc = this.getDc()
     // this.paintNetLine()
     this.paintSelCells()
     this.releaseDc(dc)
@@ -691,13 +699,12 @@ DataGrid.prototype.paint = function(type) {
     return
   }
 
-  this.clear()
+  // this.clear()
   const isMouseDown = type === 'mousedown'
   const compos = this.getCanvasXY()
-  let dc = this.getDc()
   // var imageRight = dc.getImageData(compos.x + this.getWidth(), 0, this.glGetWidth() - compos.x - this.getWidth(), this.glGetHeight());
   // var imageBottom = dc.getImageData(0, compos.y + this.getHeight(), this.glGetWidth(), this.glGetHeight() - compos.y - this.getHeight());
-  this.releaseDc(dc)
+  // this.releaseDc(dc)
   dc.save()
 
   // this.paintRowColor();//背景奇偶颜色调色器
@@ -705,44 +712,43 @@ DataGrid.prototype.paint = function(type) {
 
   // console.log('初始化 getHEight',this.getHeight(), 
   // this.getTotalHeight(),'宽度',this.getWidth(),this.getTotalWidth()
-  dc = this.getDc()
+  // dc = this.getDc()
 
-  // this.paintNetLine()
+  this.paintNetLine()
+  dc.restore()
   // var imageLeft = dc.getImageData(0, 0, compos.x + this._offsetX, this.glGetHeight());
   // var imageTop = dc.getImageData(0, 0, this.glGetWidth(), compos.y + this._offsetY);
-  this.releaseDc(dc)
+  // this.releaseDc(dc)
 
   this.paintCells()
   if (this.getMousecursor().indexOf('paintborder') == -1 && this._cols.length !== 0) {
     // if (type === 'isMouseDown') {
-    this.checkIsInCombineCellsAroundSelCells() // 第一次渲染 检测第一个单元格是不是合并单元格
+    // this.checkIsInCombineCellsAroundSelCells() // 第一次渲染 检测第一个单元格是不是合并单元格
     this.paintSelCells()
     // }
   }
   // this.paintNetLine()
   /* 绘制选中框*/
 
-  dc = this.getDc()
+  // dc = this.getDc()
   // dc.putImageData(imageLeft, 0, 0);
   // dc.putImageData(imageTop, 0, 0);
-  this.releaseDc(dc)
+  // this.releaseDc(dc)
   dc.restore()
-  // if (this.isShowHeader()) this.paintHeader() // 画表头的字母
+  if (this.isShowHeader()) this.paintHeader() // 画表头的字母
 
-  dc = this.getDc()
+  // dc = this.getDc()
   // dc.putImageData(imageRight, compos.x + this.getWidth(), 0);
   // dc.putImageData(imageBottom, 0, compos.y + this.getHeight());
-  this.releaseDc(dc)
+  // this.releaseDc(dc)
   // this.paintBbname(dc);
 }
 DataGrid.prototype.reDrawChart=function(){
-  console.time('reDrawChart');
   let dc = this.getDc()
   // console.log(this.getTotalWidth(),this.getTotalHeight(),this.width,this.height)
 
   dc.clearRect(0,0,this.glGetWidth(),this.getHeight());
   this.paint()
-  console.timeEnd('reDrawChart');
 }
 DataGrid.prototype.checkIsInCombineCellsAroundSelCells = function(){
   var cell;

@@ -250,6 +250,9 @@ export default {
       this.height = Math.max(maxHeight, this.totalHeight)
       this.canvasExcelInstance.setSize({ width: this.width, height: this.height })
     },
+    reDrawChart(){
+      this.canvasExcelInstance.reDrawChart()
+    },
     rePaintCanvas() {
       const { cells } = TableExpand.getTableSchema(this.tableSchema, this.tableData, {})
       this.canvasExcelInstance.redrawCells(cells)

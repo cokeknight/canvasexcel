@@ -108,7 +108,9 @@ export default class CanvasExcel {
   handleScrollY(scrollY) {
     this.datagrid.dataGrid.setScrollY(scrollY)
   }
-
+  reDrawChart(){
+    this.datagrid.dataGrid.reDrawChart()
+  }
   redrawCells(cells) {
     this.datagrid.dataGrid.redrawCells(cells)
   }

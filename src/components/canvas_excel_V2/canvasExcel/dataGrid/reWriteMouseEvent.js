@@ -22,7 +22,6 @@ import {
 const borderColor = '#d8dade'
 const DataGrid = require('./instance').default.default
 DataGrid.prototype.paintSelCells = function paintSelCells() {
-  console.time('paintSelCells')
   // eslint-disable-next-line
   const startcoor = this.getCellLeftTopCoor(this._sel_startRow, this._sel_startCol)
   // eslint-disable-next-line

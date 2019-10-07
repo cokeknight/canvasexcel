@@ -496,6 +496,12 @@ DataGrid.prototype.getTotalHeight = function (){
   // }
   // return height + this._offsetY
 }
+DataGrid.prototype.getVisibleHeight = function (){
+  return this.getHeight() - Config.colheadheight
+}
+DataGrid.prototype.getVisibleWidth = function (){
+  return this.getWidth() - Config.rowheadwidth
+}
 DataGrid.prototype.redrawCells = function (cells){
   var i,j
   // this._cells = []
